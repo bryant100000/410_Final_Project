@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename = "Lecture Video Links.txt.txt"
+filename = "Lecture Video Links.txt"
 with open(filename,"r") as f:
     lines = f.readlines()
     #print(lines)
