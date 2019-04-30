@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from pprint import pprint
 
-filename = "Lecture Video Links.txt"
+filename = "Lecture Video Links.txt.txt"
 with open(filename,"r") as f:
     lines = f.readlines()
     #print(lines)
