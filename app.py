@@ -1,5 +1,6 @@
 from pprint import pprint
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -36,15 +37,11 @@ def search(term):
     return found_tuples
 
 pprint(search("clustering"))
-pprint(data_text)
 
 # Build bag-of-words-model
 vectorizer = CountVectorizer(max_df = 0.3)
 feature_vectors = vectorizer.fit_transform(data_text).todense()
-#np.set_printoptions(threshold=1000)
 vocab_dic = vectorizer.vocabulary_
-print(feature_vectors)
-print(vocab_dic)
 
 sums = np.sum(feature_vectors, axis=0)
 sorted_word_frequency = -np.sort(-sums)
@@ -55,21 +52,22 @@ plt.ylabel("Word Counts")
 plt.title("Word Count vs Work Rank")
 plt.plot(range(len(sorted_word_frequency)), sorted_word_frequency, linestyle="", marker="o")
 
-# Perform Query
-query = ["text retrieval"]
-query_vector = vectorizer.transform(query)
-num_results = 10
+# Used to search a term or phrase
+def search_query(term, num_results):
+  query = [term]
+  query_vector = vectorizer.transform(query)
 
-from sklearn.neighbors import NearestNeighbors
-neigh = NearestNeighbors(metric="cosine")
-neigh.fit(feature_vectors)
-result = neigh.kneighbors(query_vector, n_neighbors=num_results)
-print(result)
-for i in range(num_results):
-  if i == 0 and result[0][0][0] == 1:
-    print("Sorry your search query was not found!")
-    break
-  if result[0][0][i] == 1:
-    break
-  else:
-    pprint(data_tuples[result[1][0][i]])
+  neigh = NearestNeighbors(metric="cosine")
+  neigh.fit(feature_vectors)
+  result = neigh.kneighbors(query_vector, n_neighbors=num_results)
+  results = []
+  for i in range(num_results):
+    if i == 0 and result[0][0][0] == 1:
+      print("Sorry your search query was not found!")
+      return results
+    if result[0][0][i] == 1:
+      return results
+    else:
+      results.append(data_tuples[result[1][0][i]])
+  return results
+pprint(search_query("text retrieval", 5))
