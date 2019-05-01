@@ -4,6 +4,7 @@ from tkinter import *
 
 ###############################################################################
 #
+# ***RUN THIS in order to use the GUI and thereby the application!
 # App_UI:
 #   Front-end of the application. Uses Tkinter in conjunction with the back-end
 #   to accept queries from and deliver results to the user.
